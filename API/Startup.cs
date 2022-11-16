@@ -3,6 +3,8 @@ using Persistence;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Activities;
+using Application.Core;
+using API.Extensions;
 
 namespace API
 {
@@ -15,24 +17,9 @@ namespace API
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-            });
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", policy =>
-                 {
-                     policy
-                     .AllowAnyMethod()
-                     .AllowAnyHeader()
-                     .WithOrigins("http://localhost:3000", "http://192.168.1.2:3000", "https://localhost:5001");
-                 });
-            });
-            services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddApplicationServices(Configuration);
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
