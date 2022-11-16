@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
+import { Header } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 
 function App() {
   const [activities, setActivities]=useState([]);
@@ -12,17 +13,15 @@ function App() {
     });
   },[])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-       <ul>
+    <div className="">
+      <Header as='h2' icon='users' content='Reactivities'/>     
+       <List>
         {activities.map((item:any)=>(
-          <li key={item.id}>
+          <List.Item key={item.id}>
             {item.title}
-          </li>
+          </List.Item>
         ))}
-       </ul>
-      </header>
+       </List>    
     </div>
   );
 }

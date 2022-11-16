@@ -1,6 +1,8 @@
 using Microsoft.OpenApi.Models;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using Application.Activities;
 
 namespace API
 {
@@ -30,6 +32,7 @@ namespace API
                      .WithOrigins("http://localhost:3000", "http://192.168.1.2:3000", "https://localhost:5001");
                  });
             });
+            services.AddMediatR(typeof(List.Handler).Assembly);
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
