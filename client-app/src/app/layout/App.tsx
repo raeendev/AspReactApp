@@ -10,18 +10,42 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined);
+  const [editMode, setEditMode] = useState(false);
+
   useEffect(() => {
-    axios.get("https://localhost:5001/api/activities").then((response) => {
-      setActivities(response.data);
-    });
+    axios
+      .get<Activity[]>("https://localhost:5001/api/activities")
+      .then((response) => {
+        setActivities(response.data);
+      });
   }, []);
 
-  function handleSelectedActivity() {}
+  function handleSelectActivity(id: string) {
+    setSelectedActivity(activities.find((x) => x.id === id));
+  }
+  function handleCancelSelectActivity() {
+    setSelectedActivity(undefined);
+  }
+  function handleFormOpen(id?: string) {
+    id ? handleSelectActivity(id) : handleCancelSelectActivity();
+    setEditMode(true);
+  }
+  function handleFormClose() {
+    setEditMode(false);
+  }
   return (
     <>
-      <NavBar />
+      <NavBar openForm={handleFormOpen}/>
       <Container style={{ marginTop: "7rem" }}>
-        <ActivityDashboard activities={activities} />
+        <ActivityDashboard
+          activities={activities}
+          selectedActivity={selectedActivity}
+          selectActivity={handleSelectActivity}
+          cancelSelectActivity={handleCancelSelectActivity}
+          editMode={editMode}
+          openForm={handleFormOpen}
+          closeForm={handleFormClose}
+        />
       </Container>
     </>
   );
